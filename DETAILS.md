@@ -19,7 +19,7 @@ the last rule is a subsequence rules include rule Rule and rule __, and the last
 there is an action if match, and the action code will use the label(initializer, rules) as parameters.
 
 
-ast:                                                          bytecode:
+ast:                                                          
 ```javascript
       {
          "type": "rule",
@@ -27,11 +27,11 @@ ast:                                                          bytecode:
          "expression": {
             "type": "action",
             "expression": {
-               "type": "sequence",                             //5,    op.PUSH_CURR_POS
-               "elements": [                                   //
-                  {                                            //#start check rule __
-                     "type": "rule_ref",                       //27,   op.RULE
-                     "name": "__",                             //100,  rule __ index id in ast node.rules
+               "type": "sequence",                            
+               "elements": [                                  
+                  {                                           
+                     "type": "rule_ref",                      
+                     "name": "__",                            
                      "location": {
                         "start": {
                            "offset": 1552,
@@ -44,20 +44,20 @@ ast:                                                          bytecode:
                            "column": 7
                         }
                      }
-                  },                                            //#start check rule initializer:(Initializer __)?
-                  {                                             //15,101,3 op.IF_NOT_ERROR,then-length,else-length  
-                     "type": "labeled",                         //  
-                     "label": "initializer",                    //#put this label into env for action code 
-                     "expression": {                            //
-                        "type": "optional",                     //
-                        "expression": {                         //
-                           "type": "group",                     //
-                           "expression": {                      //
-                              "type": "sequence",               //5,      op.PUSH_CURR_POS
-                              "elements": [                     //
-                                 {                              //#start check rule Initializer
-                                    "type": "rule_ref",         //27,   op.RULE
-                                    "name": "Initializer",      //1,  rule Initializer index id in ast node.rules
+                  },                                          
+                  {                                           
+                     "type": "labeled",                       
+                     "label": "initializer",                  
+                     "expression": {                          
+                        "type": "optional",                   
+                        "expression": {                       
+                           "type": "group",                   
+                           "expression": {                    
+                              "type": "sequence",             
+                              "elements": [                   
+                                 {                            
+                                    "type": "rule_ref",       
+                                    "name": "Initializer",    
                                     "location": {
                                        "start": {
                                           "offset": 1568,
@@ -71,9 +71,9 @@ ast:                                                          bytecode:
                                        }
                                     }
                                  },
-                                 {                               //15,12,3  op.IF_NOT_ERROR,then-length,else-length
-                                    "type": "rule_ref",          //27,   op.RULE  
-                                    "name": "__",                //100,  rule __ index id in ast node.rules
+                                 {                               
+                                    "type": "rule_ref",          
+                                    "name": "__",                
                                     "location": {
                                        "start": {
                                           "offset": 1580,
@@ -86,17 +86,17 @@ ast:                                                          bytecode:
                                           "column": 35
                                        }
                                     }
-                                 }                               //15,3,4  op.IF_NOT_ERROR,then-length,else-length
-                              ],                                 //11,2,9  op.WRAP node.elements.length, op.NIP
-                              "location": {                      //8,2,    op.POP_N N=2
-                                 "start": {                      //7,      op.POP_CURR_POS
-                                    "offset": 1568,              //3,      op.PUSH_FAILED
-                                    "line": 58,                  //6,      op.POP
-                                    "column": 21                 //7,      op.POP_CURR_POS
-                                 },                              //3,      op.PUSH_FAILED
-                                 "end": {                        //14,2,0  op.IF_ERROR,then-length,else-length
-                                    "offset": 1582,              //6,      op.POP
-                                    "line": 58,                  //2,      op.PUSH_NULL
+                                 }                               
+                              ],                                 
+                              "location": {                      
+                                 "start": {                      
+                                    "offset": 1568,              
+                                    "line": 58,                  
+                                    "column": 21                 
+                                 },                              
+                                 "end": {                        
+                                    "offset": 1582,              
+                                    "line": 58,                  
                                     "column": 35
                                  }
                               }
@@ -128,19 +128,19 @@ ast:                                                          bytecode:
                         }
                      }
                   },
-                  {                                                  //15,68,4  op.IF_NOT_ERROR,then-length,else-length
-                     "type": "labeled",                              //
-                     "label": "rules",                               //
-                     "expression": {                                 //#start check rules:(Rule __)+, need return an Array for at least one
-                        "type": "one_or_more",                       //4, op.PUSH_EMPTY_ARRAY
-                        "expression": {                              //
-                           "type": "group",                          //
-                           "expression": {                           //
-                              "type": "sequence",                    //5,      op.PUSH_CURR_POS
-                              "elements": [                          //
-                                 {                                   //
-                                    "type": "rule_ref",              //27,   op.RULE
-                                    "name": "Rule",                  //2,  rule __ index id in ast node.rules
+                  {                                                  
+                     "type": "labeled",                              
+                     "label": "rules",                               
+                     "expression": {                                 
+                        "type": "one_or_more",                       
+                        "expression": {                              
+                           "type": "group",                          
+                           "expression": {                           
+                              "type": "sequence",                    
+                              "elements": [                          
+                                 {                                   
+                                    "type": "rule_ref",              
+                                    "name": "Rule",                  
                                     "location": {
                                        "start": {
                                           "offset": 1592,
@@ -154,9 +154,9 @@ ast:                                                          bytecode:
                                        }
                                     }
                                  },
-                                 {                                   //15,12,3  op.IF_NOT_ERROR,then-length,else-length
-                                    "type": "rule_ref",              //27,   op.RULE
-                                    "name": "__",                    //100,  rule __ index id in ast node.rules
+                                 {                                   
+                                    "type": "rule_ref",              
+                                    "name": "__",                    
                                     "location": {
                                        "start": {
                                           "offset": 1597,
@@ -169,25 +169,25 @@ ast:                                                          bytecode:
                                           "column": 52
                                        }
                                     }
-                                 }                                   //15,3,4  op.IF_NOT_ERROR,then-length,else-length
-                              ],                                     //11,2,9  op.WRAP node.elements.length, op.NIP
-                              "location": {                          //8,2,    op.POP_N N=2
-                                 "start": {                          //7,      op.POP_CURR_POS
-                                    "offset": 1592,                  //3,      op.PUSH_FAILED
-                                    "line": 58,                      //6,      op.POP
-                                    "column": 45                     //7,      op.POP_CURR_POS
-                                 },                                  //3,      op.PUSH_FAILED
-                                 "end": {                            //15,25,3 op.IF_NOT_ERROR,then-length,else-length
-                                    "offset": 1599,                  //16,22   op.WHILE_NOT_ERROR body-length
-                                    "line": 58,                      //10,     op.APPEND
-                                    "column": 52                     //5,27,2,15,12,3,27,100,15,3,4,11,2,9,8,2,7,3,6,7,3 #repeat body
-                                 }                                   //6, op.POP
-                              }                                      //6, op.POP
-                           }                                         //6, op.POP
-                        },                                           //3, op.PUSH_FAILED
-                        "location": {                                //15,8,4  op.IF_NOT_ERROR,then-length,else-length
+                                 }                                   
+                              ],                                     
+                              "location": {                          
+                                 "start": {                          
+                                    "offset": 1592,                  
+                                    "line": 58,                      
+                                    "column": 45                     
+                                 },                                  
+                                 "end": {                            
+                                    "offset": 1599,                  
+                                    "line": 58,                      
+                                    "column": 52                     
+                                 }                                   
+                              }                                      
+                           }                                         
+                        },                                           
+                        "location": {                                
                            "start": {
-                              "offset": 1591,                        //24,3 op.LOAD_SAVED_POS node.elements.length
+                              "offset": 1591,                        
                               "line": 58,
                               "column": 44
                            },
@@ -225,20 +225,20 @@ ast:                                                          bytecode:
                   }
                }
             },
-            "code": "                                                     //26, op.CALL
-      return {                                                            //0,
-        type: \"grammar\",                                                //4,
-        initializer: extractOptional(initializer, 0),                     //2,
-        rules: extractList(rules, 0),                                     //1,0 
-        location: location()                                              //8,3,    op.POP_N N=3
-      };                                                                  //7,      op.POP_CURR_POS
-    ",                                                                    //3,      op.PUSH_FAILED
-            "location": {                                                 //8,2,    op.POP_N N=2
-               "start": {                                                 //7,      op.POP_CURR_POS
-                  "offset": 1552,                                         //3,      op.PUSH_FAILED
-                  "line": 58,                                             //6,      op.POP
-                  "column": 5                                             //7,      op.POP_CURR_POS
-               },                                                         //3,      op.PUSH_FAILED
+            "code": "                                                     
+      return {                                                            
+        type: \"grammar\",                                                
+        initializer: extractOptional(initializer, 0),                     
+        rules: extractList(rules, 0),                                     
+        location: location()                                              
+      };                                                                  
+    ",                                                                    
+            "location": {                                                 
+               "start": {                                                 
+                  "offset": 1552,                                         
+                  "line": 58,                                             
+                  "column": 5                                             
+               },                                                         
                "end": {
                   "offset": 1779,
                   "line": 65,
@@ -261,10 +261,10 @@ ast:                                                          bytecode:
       }
 ```	  
 bytecode:
-5,27,100,15,101,3,5,27,1,15,12,3,27,100,15,3,4,11,2,9,
-8,2,7,3,6,7,3,14,2,0,6,2,15,68,4,4,5,27,2,15,12,3,27,100,15,3,4,11,2,9,8,2,7,3,6
-,7,3,15,25,3,16,22,10,5,27,2,15,12,3,27,100,15,3,4,11,2,9,8,2,7,3,6,7,3,6,6,6,3,
-15,8,4,24,3,26,0,4,2,1,0,8,3,7,3,8,2,7,3,6,7,3
+5,27,100,15,101,3,5,27,1,15,12,3,27,100,15,3,4,11,2,9,8,2,7,3,6,7,3,14,2,0,6,2,
+15,68,4,4,5,27,2,15,12,3,27,100,15,3,4,11,2,9,8,2,7,3,6,7,3,15,25,3,16,22,10,5,
+27,2,15,12,3,27,100,15,3,4,11,2,9,8,2,7,3,6,7,3,6,6,6,3,15,8,4,24,3,26,0,4,2,1,
+0,8,3,7,3,8,2,7,3,6,7,3
 
 
 generated code:
