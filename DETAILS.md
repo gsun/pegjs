@@ -20,7 +20,7 @@ there is an action if match, and the action code will use the label(initializer,
 
 
 ast:                                                          bytecode:
-```json
+```javascript
       {
          "type": "rule",
          "name": "Grammar",
