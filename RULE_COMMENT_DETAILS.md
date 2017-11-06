@@ -3,6 +3,8 @@ Comment "comment"
   = MultiLineComment
   / SingleLineComment
 ```
+Comment rule include named, choice, rule_ref expression.
+
 ```javascript
 {
          "type": "rule",
@@ -91,19 +93,22 @@ bytecode:28,27,20,14,3,0,6,27,22,29,14,2,0,23,61
 
 ```javascript
 choice:
+
+  var peg$c61 = peg$otherExpectation("comment");
+  
   function peg$parseComment() {
     var startPos = peg$currPos;
     var s0,
     s1;
 
-    peg$silentFails++;                                          //op.SILENT_FAILS_ON,
-    s0 = peg$parseMultiLineComment();                           //op.Rule 20
-    if (s0 === peg$FAILED) {                                    //op.IF_ERROR, 3, 0,
-      s0 = peg$parseSingleLineComment();                        //op.POP
-    }                                                           //op.Rule 22
-    peg$silentFails--;                                          //op.SILENT_FAILS_OFF,
-    if (s0 === peg$FAILED) {                                    //op.IF_ERROR, 2, 0, 
-      s1 = peg$FAILED;                                          //op.FAIL, nameIndex
+    peg$silentFails++;                                          //28         op.SILENT_FAILS_ON,
+    s0 = peg$parseMultiLineComment();                           //27,20      op.Rule 20
+    if (s0 === peg$FAILED) {                                    //14,3,0     op.IF_ERROR, then-length, else-length,
+      s0 = peg$parseSingleLineComment();                        //6          op.POP
+    }                                                           //27,22      op.Rule 22
+    peg$silentFails--;                                          //29         op.SILENT_FAILS_OFF,
+    if (s0 === peg$FAILED) {                                    //14,2,0     op.IF_ERROR, then-length, else-length, 
+      s1 = peg$FAILED;                                          //23,61      op.FAIL, nameIndex
       if (peg$silentFails === 0) {
         peg$fail(peg$c61);
       }
