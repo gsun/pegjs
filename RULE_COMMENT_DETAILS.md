@@ -1,7 +1,9 @@
+```pegjs
 Comment "comment"
   = MultiLineComment
   / SingleLineComment
-
+```
+```javascript
 {
          "type": "rule",
          "name": "Comment",
@@ -83,23 +85,25 @@ Comment "comment"
             }
          }
       }
+```
       
 bytecode:28,27,20,14,3,0,6,27,22,29,14,2,0,23,61
 
+```javascript
 choice:
   function peg$parseComment() {
     var startPos = peg$currPos;
     var s0,
     s1;
 
-    peg$silentFails++;                                          op.SILENT_FAILS_ON,
-    s0 = peg$parseMultiLineComment();                           op.Rule 20
-    if (s0 === peg$FAILED) {                                    op.IF_ERROR, 3, 0,
-      s0 = peg$parseSingleLineComment();                        op.POP
-    }                                                           op.Rule 22
-    peg$silentFails--;                                          op.SILENT_FAILS_OFF,
-    if (s0 === peg$FAILED) {                                    op.IF_ERROR, 2, 0, 
-      s1 = peg$FAILED;                                          op.FAIL, nameIndex
+    peg$silentFails++;                                          //op.SILENT_FAILS_ON,
+    s0 = peg$parseMultiLineComment();                           //op.Rule 20
+    if (s0 === peg$FAILED) {                                    //op.IF_ERROR, 3, 0,
+      s0 = peg$parseSingleLineComment();                        //op.POP
+    }                                                           //op.Rule 22
+    peg$silentFails--;                                          //op.SILENT_FAILS_OFF,
+    if (s0 === peg$FAILED) {                                    //op.IF_ERROR, 2, 0, 
+      s1 = peg$FAILED;                                          //op.FAIL, nameIndex
       if (peg$silentFails === 0) {
         peg$fail(peg$c61);
       }
@@ -108,3 +112,4 @@ choice:
     return s0;
 
   } 
+```
