@@ -474,7 +474,7 @@ bytecode:5,4,4,5,5,28,20,143,2,2,21,1,23,144,29,14,3,3,6,6,1,6,7,
           s2 = peg$FAILED;                                        //3,          op.PUSH_FAILED
         }                                                                     
       }                                                           
-    }                                                             //6,          op.POP        
+    }                                                             //6,          op.POP                 
     if (s1 !== peg$FAILED) {                                      //15,2,1      op.IF_NOT_ERROR then-length else-length
       s0 = input.substring(s0, peg$currPos);                      //6,12        op.POP op.TEXT
     } else {                                                                  
