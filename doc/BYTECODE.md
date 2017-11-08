@@ -1,5 +1,5 @@
 
-C:\Data\gsun\Documents\GitHub\pegjs\bin>node peg.js --trace ../src/parser.pegjs
+node peg.js --trace ../src/parser.pegjs
 0, name:Grammar, bytecode:5,27,100,15,101,3,5,27,1,15,12,3,27,100,15,3,4,11,2,9,
 8,2,7,3,6,7,3,14,2,0,6,2,15,68,4,4,5,27,2,15,12,3,27,100,15,3,4,11,2,9,8,2,7,3,6
 ,7,3,15,25,3,16,22,10,5,27,2,15,12,3,27,100,15,3,4,11,2,9,8,2,7,3,6,7,3,6,6,6,3,
@@ -253,5 +253,3 @@ C:\Data\gsun\Documents\GitHub\pegjs\bin>node peg.js --trace ../src/parser.pegjs
 1,3,9,8,3,7,3,8,2,7,3,6,7,3,14,22,0,6,5,27,100,15,12,3,27,103,15,3,4,11,2,9,8,2,
 7,3,6,7,3
 103, name:EOF, bytecode:5,28,17,2,2,21,1,23,34,29,14,3,3,6,6,1,6,7,3
-
-C:\Data\gsun\Documents\GitHub\pegjs\bin>
