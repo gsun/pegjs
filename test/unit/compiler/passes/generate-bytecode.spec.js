@@ -16,7 +16,7 @@ describe("compiler pass |generateBytecode|", function() {
   }
 
   function constsDetails(consts) { return { consts: consts }; }
-  function constfuncesDetails(consts) { return { constfunces: consts }; }
+  function funconstsDetails(consts) { return { funconsts: consts }; }
 
   describe("for grammar", function() {
     it("generates correct bytecode", function() {
@@ -116,7 +116,7 @@ describe("compiler pass |generateBytecode|", function() {
       });
 
 	  it("defines correct constant functions", function() {
-        expect(pass).to.changeAST(grammar, constfuncesDetails([
+        expect(pass).to.changeAST(grammar, funconstsDetails([
           "function() { code }"
         ]));
       });
@@ -144,7 +144,7 @@ describe("compiler pass |generateBytecode|", function() {
       });
 	  
 	  it("defines correct constant functions", function() {
-        expect(pass).to.changeAST(grammar, constfuncesDetails([
+        expect(pass).to.changeAST(grammar, funconstsDetails([
           "function(a) { code }"
         ]));
       });
@@ -188,7 +188,7 @@ describe("compiler pass |generateBytecode|", function() {
       });
 	  
 	  it("defines correct constant functions", function() {
-        expect(pass).to.changeAST(grammar, constfuncesDetails([
+        expect(pass).to.changeAST(grammar, funconstsDetails([
           "function(a, b, c) { code }"
         ]));
       });
@@ -408,7 +408,7 @@ describe("compiler pass |generateBytecode|", function() {
       });
 	 
 	  it("defines correct constant functions", function() {
-        expect(pass).to.changeAST(grammar, constfuncesDetails([
+        expect(pass).to.changeAST(grammar, funconstsDetails([
           "function() { code }"
         ]));
       });
@@ -463,7 +463,7 @@ describe("compiler pass |generateBytecode|", function() {
       });
 	  
 	  it("defines correct constant functions", function() {
-        expect(pass).to.changeAST(grammar, constfuncesDetails([
+        expect(pass).to.changeAST(grammar, funconstsDetails([
           "function(a, b, c) { code }"
         ]));
       });
@@ -494,7 +494,7 @@ describe("compiler pass |generateBytecode|", function() {
       });
 	  
 	  it("defines correct constant functions", function() {
-        expect(pass).to.changeAST(grammar, constfuncesDetails([
+        expect(pass).to.changeAST(grammar, funconstsDetails([
           "function() { code }"
         ]));
       });
@@ -549,7 +549,7 @@ describe("compiler pass |generateBytecode|", function() {
       });
 	  
 	  it("defines correct constant functions", function() {
-        expect(pass).to.changeAST(grammar, constfuncesDetails([
+        expect(pass).to.changeAST(grammar, funconstsDetails([
           "function(a, b, c) { code }"
         ]));
       });
