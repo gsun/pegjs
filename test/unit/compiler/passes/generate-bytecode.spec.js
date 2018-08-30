@@ -17,6 +17,7 @@ describe("compiler pass |generateBytecode|", function() {
 
   function constsDetails(consts) { return { consts: consts }; }
   function funconstsDetails(consts) { return { funconsts: consts }; }
+  function expconstsDetails(consts) { return { expconsts: consts }; }
 
   describe("for grammar", function() {
     it("generates correct bytecode", function() {
@@ -26,9 +27,9 @@ describe("compiler pass |generateBytecode|", function() {
         "c = 'c'"
       ].join("\n"), {
         rules: [
-          { bytecode: [18, 0, 2, 2, 22, 0, 23, 1] },
-          { bytecode: [18, 2, 2, 2, 22, 2, 23, 3] },
-          { bytecode: [18, 4, 2, 2, 22, 4, 23, 5] }
+          { bytecode: [18, 0, 2, 2, 22, 0, 23, 0] },
+          { bytecode: [18, 1, 2, 2, 22, 1, 23, 1] },
+          { bytecode: [18, 2, 2, 2, 22, 2, 23, 2] }
         ]
       });
     });
@@ -40,10 +41,18 @@ describe("compiler pass |generateBytecode|", function() {
         "c = 'c'"
       ].join("\n"), constsDetails([
         "\"a\"",
-        "peg$literalExpectation(\"a\", false)",
         "\"b\"",
+        "\"c\""
+      ]));
+    });
+    it("defines correct constants", function() {
+      expect(pass).to.changeAST([
+        "a = 'a'",
+        "b = 'b'",
+        "c = 'c'"
+      ].join("\n"), expconstsDetails([
+        "peg$literalExpectation(\"a\", false)",
         "peg$literalExpectation(\"b\", false)",
-        "\"c\"",
         "peg$literalExpectation(\"c\", false)"
       ]));
     });
@@ -52,7 +61,7 @@ describe("compiler pass |generateBytecode|", function() {
   describe("for rule", function() {
     it("generates correct bytecode", function() {
       expect(pass).to.changeAST("start = 'a'", bytecodeDetails([
-        18, 0, 2, 2, 22, 0, 23, 1   // <expression>
+        18, 0, 2, 2, 22, 0, 23, 0   // <expression>
       ]));
     });
   });
@@ -63,7 +72,7 @@ describe("compiler pass |generateBytecode|", function() {
     it("generates correct bytecode", function() {
       expect(pass).to.changeAST(grammar, bytecodeDetails([
         28,                          // SILENT_FAILS_ON
-        18, 1, 2, 2, 22, 1, 23, 2,   // <expression>
+        18, 0, 2, 2, 22, 0, 23, 1,   // <expression>
         29,                          // SILENT_FAILS_OFF
         14, 2, 0,                    // IF_ERROR
         23, 0                        //   * FAIL
@@ -72,8 +81,12 @@ describe("compiler pass |generateBytecode|", function() {
 
     it("defines correct constants", function() {
       expect(pass).to.changeAST(grammar, constsDetails([
-        "peg$otherExpectation(\"start\")",
         "\"a\"",
+      ]));
+    });
+    it("defines correct constants", function() {
+      expect(pass).to.changeAST(grammar, expconstsDetails([
+        "peg$otherExpectation(\"start\")",
         "peg$literalExpectation(\"a\", false)"
       ]));
     });
@@ -82,13 +95,13 @@ describe("compiler pass |generateBytecode|", function() {
   describe("for choice", function() {
     it("generates correct bytecode", function() {
       expect(pass).to.changeAST("start = 'a' / 'b' / 'c'", bytecodeDetails([
-        18, 0, 2, 2, 22, 0, 23, 1,   // <alternatives[0]>
+        18, 0, 2, 2, 22, 0, 23, 0,   // <alternatives[0]>
         14, 21, 0,                   // IF_ERROR
         6,                           //   * POP
-        18, 2, 2, 2, 22, 2, 23, 3,   //     <alternatives[1]>
+        18, 1, 2, 2, 22, 1, 23, 1,   //     <alternatives[1]>
         14, 9, 0,                    //     IF_ERROR
         6,                           //       * POP
-        18, 4, 2, 2, 22, 4, 23, 5    //         <alternatives[2]>
+        18, 2, 2, 2, 22, 2, 23, 2    //         <alternatives[2]>
       ]));
     });
   });
@@ -100,7 +113,7 @@ describe("compiler pass |generateBytecode|", function() {
       it("generates correct bytecode", function() {
         expect(pass).to.changeAST(grammar, bytecodeDetails([
           5,                           // PUSH_CURR_POS
-          18, 0, 2, 2, 22, 0, 23, 1,   // <expression>
+          18, 0, 2, 2, 22, 0, 23, 0,   // <expression>
           15, 6, 0,                    // IF_NOT_ERROR
           24, 1,                       //   * LOAD_SAVED_POS
           26, 0, 1, 0,                 //     CALL
@@ -110,7 +123,12 @@ describe("compiler pass |generateBytecode|", function() {
 
       it("defines correct constants", function() {
         expect(pass).to.changeAST(grammar, constsDetails([
-          "\"a\"",
+          "\"a\""
+        ]));
+      });
+	  
+      it("defines correct constants", function() {
+        expect(pass).to.changeAST(grammar, expconstsDetails([
           "peg$literalExpectation(\"a\", false)"
         ]));
       });
@@ -128,7 +146,7 @@ describe("compiler pass |generateBytecode|", function() {
       it("generates correct bytecode", function() {
         expect(pass).to.changeAST(grammar, bytecodeDetails([
           5,                           // PUSH_CURR_POS
-          18, 0, 2, 2, 22, 0, 23, 1,   // <expression>
+          18, 0, 2, 2, 22, 0, 23, 0,   // <expression>
           15, 7, 0,                    // IF_NOT_ERROR
           24, 1,                       //   * LOAD_SAVED_POS
           26, 0, 1, 1, 0,              //     CALL
@@ -138,7 +156,12 @@ describe("compiler pass |generateBytecode|", function() {
 
       it("defines correct constants", function() {
         expect(pass).to.changeAST(grammar, constsDetails([
-          "\"a\"",
+          "\"a\""
+        ]));
+      });
+	  
+      it("defines correct constants", function() {
+        expect(pass).to.changeAST(grammar, expconstsDetails([
           "peg$literalExpectation(\"a\", false)"
         ]));
       });
@@ -156,11 +179,11 @@ describe("compiler pass |generateBytecode|", function() {
       it("generates correct bytecode", function() {
         expect(pass).to.changeAST(grammar, bytecodeDetails([
           5,                           // PUSH_CURR_POS
-          18, 0, 2, 2, 22, 0, 23, 1,   // <elements[0]>
+          18, 0, 2, 2, 22, 0, 23, 0,   // <elements[0]>
           15, 39, 3,                   // IF_NOT_ERROR
-          18, 2, 2, 2, 22, 2, 23, 3,   //   * <elements[1]>
+          18, 1, 2, 2, 22, 1, 23, 1,   //   * <elements[1]>
           15, 24, 4,                   //     IF_NOT_ERROR
-          18, 4, 2, 2, 22, 4, 23, 5,   //       * <elements[2]>
+          18, 2, 2, 2, 22, 2, 23, 2,   //       * <elements[2]>
           15, 9, 4,                   //         IF_NOT_ERROR
           24, 3,                       //           * LOAD_SAVED_POS
           26, 0, 4, 3, 2, 1, 0,        //             CALL <6>
@@ -179,10 +202,15 @@ describe("compiler pass |generateBytecode|", function() {
       it("defines correct constants", function() {
         expect(pass).to.changeAST(grammar, constsDetails([
           "\"a\"",
-          "peg$literalExpectation(\"a\", false)",
           "\"b\"",
+          "\"c\""
+        ]));
+      });
+	  
+      it("defines correct constants", function() {
+        expect(pass).to.changeAST(grammar, expconstsDetails([
+          "peg$literalExpectation(\"a\", false)",
           "peg$literalExpectation(\"b\", false)",
-          "\"c\"",
           "peg$literalExpectation(\"c\", false)"
         ]));
       });
@@ -201,11 +229,11 @@ describe("compiler pass |generateBytecode|", function() {
     it("generates correct bytecode", function() {
       expect(pass).to.changeAST(grammar, bytecodeDetails([
         5,                           // PUSH_CURR_POS
-        18, 0, 2, 2, 22, 0, 23, 1,   // <elements[0]>
+        18, 0, 2, 2, 22, 0, 23, 0,   // <elements[0]>
         15, 33, 3,                   // IF_NOT_ERROR
-        18, 2, 2, 2, 22, 2, 23, 3,   //   * <elements[1]>
+        18, 1, 2, 2, 22, 1, 23, 1,   //   * <elements[1]>
         15, 18, 4,                   //     IF_NOT_ERROR
-        18, 4, 2, 2, 22, 4, 23, 5,   //       * <elements[2]>
+        18, 2, 2, 2, 22, 2, 23, 2,   //       * <elements[2]>
         15, 3, 4,                    //         IF_NOT_ERROR
         11, 3,                       //           * WRAP
         9,                           //             NIP
@@ -224,10 +252,14 @@ describe("compiler pass |generateBytecode|", function() {
     it("defines correct constants", function() {
       expect(pass).to.changeAST(grammar, constsDetails([
         "\"a\"",
-        "peg$literalExpectation(\"a\", false)",
         "\"b\"",
+        "\"c\""
+      ]));
+    });
+    it("defines correct constants", function() {
+      expect(pass).to.changeAST(grammar, expconstsDetails([
+        "peg$literalExpectation(\"a\", false)",
         "peg$literalExpectation(\"b\", false)",
-        "\"c\"",
         "peg$literalExpectation(\"c\", false)"
       ]));
     });
@@ -236,7 +268,7 @@ describe("compiler pass |generateBytecode|", function() {
   describe("for labeled", function() {
     it("generates correct bytecode", function() {
       expect(pass).to.changeAST("start = a:'a'", bytecodeDetails([
-        18, 0, 2, 2, 22, 0, 23, 1   // <expression>
+        18, 0, 2, 2, 22, 0, 23, 0   // <expression>
       ]));
     });
   });
@@ -245,7 +277,7 @@ describe("compiler pass |generateBytecode|", function() {
     it("generates correct bytecode", function() {
       expect(pass).to.changeAST("start = $'a'", bytecodeDetails([
         5,                           // PUSH_CURR_POS
-        18, 0, 2, 2, 22, 0, 23, 1,   // <expression>
+        18, 0, 2, 2, 22, 0, 23, 0,   // <expression>
         15, 2, 1,                    // IF_NOT_ERROR
         6,                           //   * POP
         12,                          //     TEXT
@@ -261,7 +293,7 @@ describe("compiler pass |generateBytecode|", function() {
       expect(pass).to.changeAST(grammar, bytecodeDetails([
         5,                           // PUSH_CURR_POS
         28,                          // SILENT_FAILS_ON
-        18, 0, 2, 2, 22, 0, 23, 1,   // <expression>
+        18, 0, 2, 2, 22, 0, 23, 0,   // <expression>
         29,                          // SILENT_FAILS_OFF
         15, 3, 3,                    // IF_NOT_ERROR
         6,                           //   * POP
@@ -275,7 +307,11 @@ describe("compiler pass |generateBytecode|", function() {
 
     it("defines correct constants", function() {
       expect(pass).to.changeAST(grammar, constsDetails([
-        "\"a\"",
+        "\"a\""
+      ]));
+    });
+    it("defines correct constants", function() {
+      expect(pass).to.changeAST(grammar, expconstsDetails([
         "peg$literalExpectation(\"a\", false)"
       ]));
     });
@@ -288,7 +324,7 @@ describe("compiler pass |generateBytecode|", function() {
       expect(pass).to.changeAST(grammar, bytecodeDetails([
         5,                           // PUSH_CURR_POS
         28,                          // SILENT_FAILS_ON
-        18, 0, 2, 2, 22, 0, 23, 1,   // <expression>
+        18, 0, 2, 2, 22, 0, 23, 0,   // <expression>
         29,                          // SILENT_FAILS_OFF
         14, 3, 3,                    // IF_ERROR
         6,                           //   * POP
@@ -302,7 +338,11 @@ describe("compiler pass |generateBytecode|", function() {
 
     it("defines correct constants", function() {
       expect(pass).to.changeAST(grammar, constsDetails([
-        "\"a\"",
+        "\"a\""
+      ]));
+    });
+    it("defines correct constants", function() {
+      expect(pass).to.changeAST(grammar, expconstsDetails([
         "peg$literalExpectation(\"a\", false)"
       ]));
     });
@@ -313,7 +353,7 @@ describe("compiler pass |generateBytecode|", function() {
 
     it("generates correct bytecode", function() {
       expect(pass).to.changeAST(grammar, bytecodeDetails([
-        18, 0, 2, 2, 22, 0, 23, 1,   // <expression>
+        18, 0, 2, 2, 22, 0, 23, 0,   // <expression>
         14, 2, 0,                    // IF_ERROR
         6,                           //   * POP
         2                            //     PUSH_NULL
@@ -322,7 +362,11 @@ describe("compiler pass |generateBytecode|", function() {
 
     it("defines correct constants", function() {
       expect(pass).to.changeAST(grammar, constsDetails([
-        "\"a\"",
+        "\"a\""
+      ]));
+    });
+    it("defines correct constants", function() {
+      expect(pass).to.changeAST(grammar, expconstsDetails([
         "peg$literalExpectation(\"a\", false)"
       ]));
     });
@@ -334,17 +378,21 @@ describe("compiler pass |generateBytecode|", function() {
     it("generates correct bytecode", function() {
       expect(pass).to.changeAST(grammar, bytecodeDetails([
         4,                           // PUSH_EMPTY_ARRAY
-        18, 0, 2, 2, 22, 0, 23, 1,   // <expression>
+        18, 0, 2, 2, 22, 0, 23, 0,   // <expression>
         16, 9,                       // WHILE_NOT_ERROR
         10,                          //   * APPEND
-        18, 0, 2, 2, 22, 0, 23, 1,   //     <expression>
+        18, 0, 2, 2, 22, 0, 23, 0,   //     <expression>
         6                            // POP
       ]));
     });
 
     it("defines correct constants", function() {
       expect(pass).to.changeAST(grammar, constsDetails([
-        "\"a\"",
+        "\"a\""
+      ]));
+    });
+    it("defines correct constants", function() {
+      expect(pass).to.changeAST(grammar, expconstsDetails([
         "peg$literalExpectation(\"a\", false)"
       ]));
     });
@@ -356,11 +404,11 @@ describe("compiler pass |generateBytecode|", function() {
     it("generates correct bytecode", function() {
       expect(pass).to.changeAST(grammar, bytecodeDetails([
         4,                           // PUSH_EMPTY_ARRAY
-        18, 0, 2, 2, 22, 0, 23, 1,   // <expression>
+        18, 0, 2, 2, 22, 0, 23, 0,   // <expression>
         15, 12, 3,                   // IF_NOT_ERROR
         16, 9,                       //   * WHILE_NOT_ERROR
         10,                          //       * APPEND
-        18, 0, 2, 2, 22, 0, 23, 1,   //         <expression>
+        18, 0, 2, 2, 22, 0, 23, 0,   //         <expression>
         6,                           //     POP
         6,                           //   * POP
         6,                           //     POP
@@ -370,7 +418,11 @@ describe("compiler pass |generateBytecode|", function() {
 
     it("defines correct constants", function() {
       expect(pass).to.changeAST(grammar, constsDetails([
-        "\"a\"",
+        "\"a\""
+      ]));
+    });
+    it("defines correct constants", function() {
+      expect(pass).to.changeAST(grammar, expconstsDetails([
         "peg$literalExpectation(\"a\", false)"
       ]));
     });
@@ -379,7 +431,7 @@ describe("compiler pass |generateBytecode|", function() {
   describe("for group", function() {
     it("generates correct bytecode", function() {
       expect(pass).to.changeAST("start = ('a')", bytecodeDetails([
-        18, 0, 2, 2, 22, 0, 23, 1   // <expression>
+        18, 0, 2, 2, 22, 0, 23, 0   // <expression>
       ]));
     });
   });
@@ -420,11 +472,11 @@ describe("compiler pass |generateBytecode|", function() {
       it("generates correct bytecode", function() {
         expect(pass).to.changeAST(grammar, bytecodeDetails([
           5,                           // PUSH_CURR_POS
-          18, 0, 2, 2, 22, 0, 23, 1,   // <elements[0]>
+          18, 0, 2, 2, 22, 0, 23, 0,   // <elements[0]>
           15, 55, 3,                   // IF_NOT_ERROR
-          18, 2, 2, 2, 22, 2, 23, 3,   //   * <elements[1]>
+          18, 1, 2, 2, 22, 1, 23, 1,   //   * <elements[1]>
           15, 40, 4,                   //     IF_NOT_ERROR
-          18, 4, 2, 2, 22, 4, 23, 5,   //       * <elements[2]>
+          18, 2, 2, 2, 22, 2, 23, 2,   //       * <elements[2]>
           15, 25, 4,                   //         IF_NOT_ERROR
           25,                          //           * UPDATE_SAVED_POS
           26, 0, 0, 3, 2, 1, 0,        //             CALL
@@ -454,10 +506,15 @@ describe("compiler pass |generateBytecode|", function() {
       it("defines correct constants", function() {
         expect(pass).to.changeAST(grammar, constsDetails([
           "\"a\"",
-          "peg$literalExpectation(\"a\", false)",
           "\"b\"",
+          "\"c\""
+        ]));
+      });
+	  
+      it("defines correct constants", function() {
+        expect(pass).to.changeAST(grammar, expconstsDetails([
+          "peg$literalExpectation(\"a\", false)",
           "peg$literalExpectation(\"b\", false)",
-          "\"c\"",
           "peg$literalExpectation(\"c\", false)"
         ]));
       });
@@ -506,11 +563,11 @@ describe("compiler pass |generateBytecode|", function() {
       it("generates correct bytecode", function() {
         expect(pass).to.changeAST(grammar, bytecodeDetails([
           5,                           // PUSH_CURR_POS
-          18, 0, 2, 2, 22, 0, 23, 1,   // <elements[0]>
+          18, 0, 2, 2, 22, 0, 23, 0,   // <elements[0]>
           15, 55, 3,                   // IF_NOT_ERROR
-          18, 2, 2, 2, 22, 2, 23, 3,   //   * <elements[1]>
+          18, 1, 2, 2, 22, 1, 23, 1,   //   * <elements[1]>
           15, 40, 4,                   //     IF_NOT_ERROR
-          18, 4, 2, 2, 22, 4, 23, 5,   //       * <elements[2]>
+          18, 2, 2, 2, 22, 2, 23, 2,   //       * <elements[2]>
           15, 25, 4,                   //         IF_NOT_ERROR
           25,                          //           * UPDATE_SAVED_POS
           26, 0, 0, 3, 2, 1, 0,        //             CALL
@@ -540,10 +597,15 @@ describe("compiler pass |generateBytecode|", function() {
       it("defines correct constants", function() {
         expect(pass).to.changeAST(grammar, constsDetails([
           "\"a\"",
-          "peg$literalExpectation(\"a\", false)",
           "\"b\"",
+          "\"c\""
+        ]));
+      });
+	  
+      it("defines correct constants", function() {
+        expect(pass).to.changeAST(grammar, expconstsDetails([
+          "peg$literalExpectation(\"a\", false)",
           "peg$literalExpectation(\"b\", false)",
-          "\"c\"",
           "peg$literalExpectation(\"c\", false)"
         ]));
       });
@@ -594,13 +656,17 @@ describe("compiler pass |generateBytecode|", function() {
         expect(pass).to.changeAST(grammar, bytecodeDetails([
           18, 0, 2, 2,   // MATCH_STRING
           22, 0,         //   * ACCEPT_STRING
-          23, 1          //   * FAIL
+          23, 0          //   * FAIL
         ]));
       });
 
       it("defines correct constants", function() {
         expect(pass).to.changeAST(grammar, constsDetails([
-          "\"a\"",
+          "\"a\""
+        ]));
+      });
+      it("defines correct constants", function() {
+        expect(pass).to.changeAST(grammar, expconstsDetails([
           "peg$literalExpectation(\"a\", false)"
         ]));
       });
@@ -613,13 +679,17 @@ describe("compiler pass |generateBytecode|", function() {
         expect(pass).to.changeAST(grammar, bytecodeDetails([
           19, 0, 2, 2,   // MATCH_STRING_IC
           21, 1,         //   * ACCEPT_N
-          23, 1          //   * FAIL
+          23, 0          //   * FAIL
         ]));
       });
 
       it("defines correct constants", function() {
         expect(pass).to.changeAST(grammar, constsDetails([
-          "\"a\"",
+          "\"a\""
+        ]));
+      });
+      it("defines correct constants", function() {
+        expect(pass).to.changeAST(grammar, expconstsDetails([
           "peg$literalExpectation(\"A\", true)"
         ]));
       });
@@ -631,14 +701,18 @@ describe("compiler pass |generateBytecode|", function() {
       expect(pass).to.changeAST("start = [a]", bytecodeDetails([
         20, 0, 2, 2,   // MATCH_REGEXP
         21, 1,         //   * ACCEPT_N
-        23, 1          //   * FAIL
+        23, 0          //   * FAIL
       ]));
     });
 
     describe("non-inverted case-sensitive", function() {
       it("defines correct constants", function() {
         expect(pass).to.changeAST("start = [a]", constsDetails([
-          "/^[a]/",
+          "/^[a]/"
+        ]));
+      });
+      it("defines correct constants", function() {
+        expect(pass).to.changeAST("start = [a]", expconstsDetails([
           "peg$classExpectation([\"a\"], false, false)"
         ]));
       });
@@ -647,7 +721,11 @@ describe("compiler pass |generateBytecode|", function() {
     describe("inverted case-sensitive", function() {
       it("defines correct constants", function() {
         expect(pass).to.changeAST("start = [^a]", constsDetails([
-          "/^[^a]/",
+          "/^[^a]/"
+        ]));
+      });
+      it("defines correct constants", function() {
+        expect(pass).to.changeAST("start = [^a]", expconstsDetails([
           "peg$classExpectation([\"a\"], true, false)"
         ]));
       });
@@ -656,7 +734,11 @@ describe("compiler pass |generateBytecode|", function() {
     describe("non-inverted case-insensitive", function() {
       it("defines correct constants", function() {
         expect(pass).to.changeAST("start = [a]i", constsDetails([
-          "/^[a]/i",
+          "/^[a]/i"
+        ]));
+      });
+      it("defines correct constants", function() {
+        expect(pass).to.changeAST("start = [a]i", expconstsDetails([
           "peg$classExpectation([\"a\"], false, true)"
         ]));
       });
@@ -665,7 +747,11 @@ describe("compiler pass |generateBytecode|", function() {
     describe("complex", function() {
       it("defines correct constants", function() {
         expect(pass).to.changeAST("start = [ab-def-hij-l]", constsDetails([
-          "/^[ab-def-hij-l]/",
+          "/^[ab-def-hij-l]/"
+        ]));
+      });
+      it("defines correct constants", function() {
+        expect(pass).to.changeAST("start = [ab-def-hij-l]", expconstsDetails([
           "peg$classExpectation([\"a\", [\"b\", \"d\"], \"e\", [\"f\", \"h\"], \"i\", [\"j\", \"l\"]], false, false)"
         ]));
       });
@@ -686,7 +772,7 @@ describe("compiler pass |generateBytecode|", function() {
     it("defines correct constants", function() {
       expect(pass).to.changeAST(
         grammar,
-        constsDetails(["peg$anyExpectation()"])
+        expconstsDetails(["peg$anyExpectation()"])
       );
     });
   });
