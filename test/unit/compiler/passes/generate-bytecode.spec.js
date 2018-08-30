@@ -18,6 +18,7 @@ describe("compiler pass |generateBytecode|", function() {
   function constsDetails(consts) { return { consts: consts }; }
   function funconstsDetails(consts) { return { funconsts: consts }; }
   function expconstsDetails(consts) { return { expconsts: consts }; }
+  function regconstsDetails(consts) { return { regconsts: consts }; }
 
   describe("for grammar", function() {
     it("generates correct bytecode", function() {
@@ -707,7 +708,7 @@ describe("compiler pass |generateBytecode|", function() {
 
     describe("non-inverted case-sensitive", function() {
       it("defines correct constants", function() {
-        expect(pass).to.changeAST("start = [a]", constsDetails([
+        expect(pass).to.changeAST("start = [a]", regconstsDetails([
           "/^[a]/"
         ]));
       });
@@ -720,7 +721,7 @@ describe("compiler pass |generateBytecode|", function() {
 
     describe("inverted case-sensitive", function() {
       it("defines correct constants", function() {
-        expect(pass).to.changeAST("start = [^a]", constsDetails([
+        expect(pass).to.changeAST("start = [^a]", regconstsDetails([
           "/^[^a]/"
         ]));
       });
@@ -733,7 +734,7 @@ describe("compiler pass |generateBytecode|", function() {
 
     describe("non-inverted case-insensitive", function() {
       it("defines correct constants", function() {
-        expect(pass).to.changeAST("start = [a]i", constsDetails([
+        expect(pass).to.changeAST("start = [a]i", regconstsDetails([
           "/^[a]/i"
         ]));
       });
@@ -746,7 +747,7 @@ describe("compiler pass |generateBytecode|", function() {
 
     describe("complex", function() {
       it("defines correct constants", function() {
-        expect(pass).to.changeAST("start = [ab-def-hij-l]", constsDetails([
+        expect(pass).to.changeAST("start = [ab-def-hij-l]", regconstsDetails([
           "/^[ab-def-hij-l]/"
         ]));
       });
